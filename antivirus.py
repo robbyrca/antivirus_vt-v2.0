@@ -11,6 +11,7 @@ file_quarantine = '/cuarentena'
 file_revised = '/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
 file_result1 = '/var/www/html/antivirus/cuarentena'
+file_usb = '/home/usb'
 
 #Definimos las variables para conectar con la base de datos
 mydb = mysql.connector.connect(
@@ -204,7 +205,7 @@ def sql(result, archivo):
 
 
 #PROGRAMA PRINCIPAL
-copiar('/Users/ruben/Documents/revista','/Users/ruben/Documents/revistita')
+copiar(file_usb,file_temp)
 export_recorrido = recorrer_carpeta('/Users/ruben/Documents/revistita')
 rutas = export_recorrido[0]
 archivos = export_recorrido[1]
