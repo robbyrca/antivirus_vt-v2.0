@@ -9,6 +9,8 @@ file_here = '/'
 file_temp = '/temp'
 file_quarantine = '/cuarentena'
 file_revised = '/revisado'
+file_result0 = '/var/www/html/antivirus/archivos'
+file_result1 = '/var/www/html/antivirus/cuarentena'
 
 #Definimos las variables para conectar con la base de datos
 mydb = mysql.connector.connect(
@@ -190,13 +192,13 @@ def sql(result, archivo):
     if result == 1:
         mycursor = mydb.cursor()
         sql = "INSERT INTO cuarentena (path, filename) VALUES (%s, %s)"
-        val = ('/var/www/html/antivirus/archivos', archivo)
+        val = (file_result0, archivo)
         mycursor.execute(sql, val)
         mydb.commit()
     else:   
         mycursor = mydb.cursor()
         sql = "INSERT INTO archivos (path, filename) VALUES (%s, %s)"
-        val = ('/var/www/html/antivirus/cuarentena',archivo)
+        val = (file_result1,archivo)
         mycursor.execute(sql, val)
         mydb.commit()
 
@@ -217,5 +219,9 @@ for ruta in rutas:
            print('obteniendo id: '+ruta)
            id = obtener_id(ruta)
            result = analizar(id)
+           if result == 1:
+            mover(file_temp,file_result1)
+           else:
+            mover(file_temp, file_result0) 
            sql(result,archivos[posicion])
         posicion=posicion+1
