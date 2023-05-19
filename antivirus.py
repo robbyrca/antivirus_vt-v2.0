@@ -10,6 +10,7 @@ file_temp = '/temp'
 file_quarantine = '/cuarentena'
 file_revised = '/revisado'
 
+#Definimos la función copiar
 def copiar(carpeta_origen, carpeta_desti):
     # Comprovar si la carpeta de desti existeix, si no, crear-la
     if not os.path.exists(carpeta_desti):
@@ -23,7 +24,7 @@ def copiar(carpeta_origen, carpeta_desti):
             # Copiar el fitxer a la carpeta de desti
             shutil.copy(ruta_completa, carpeta_desti)
 
-#Definimos la variable que va revisar la existencia de archivos en la ruta
+#Definimos la función que va revisar la existencia de archivos en la ruta
 def checkFileExistance(enviocheck):
     try:
         with open(enviocheck, 'r') as f:
@@ -33,7 +34,7 @@ def checkFileExistance(enviocheck):
     except IOError as e:
         return False
 
-
+#Definimos la función que va a enviar y recoger el id del archivo
 def obtener_id(file):
     global timesleepcount
     global bucle
@@ -51,7 +52,7 @@ def obtener_id(file):
     else:
         response = requests.post(url, files=files, headers=headers)
         if(response.status_code == 429):
-            print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
+            print("Error de cuota excedida")
             print("Codigo de error : " + str(response.status_code))
             exit()
         if response.status_code == 200:
@@ -62,6 +63,7 @@ def obtener_id(file):
             print ("ERROR al pujar el archiu :!")
             print ("Status code: " + str(response.status_code))
 
+#Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
         global timesleepcount
         global buclebig
@@ -104,6 +106,27 @@ def obtener_id32(file):
                 result = response.json()
                 idbig = result.get("data").get("id")
 
+#Definimos la función que va recuperar el array de los archivos de la carpeta
+def recorrer_carpeta (carpeta):
+    rutas = []
+    for nombre_archivo in os.listdir(carpeta):
+        ruta = os.path.join(carpeta, nombre_archivo)
+        if os.path.isfile(ruta):
+            rutas.append(ruta)
+    return rutas
 
+#Definimos la función que va a comprobar si un archivo es mayor que 32MB
+def comprobar_tamaño(ruta_archivo):
+    tamano_minimo = 32 * 1024 * 1024  # 32 MB en bytes
+    if os.path.isfile(ruta_archivo):
+        tamano_archivo = os.path.getsize(ruta_archivo)
+        if tamano_archivo >= tamano_minimo:
+            return True
     
 copiar('/Users/ruben/Documents/Audiolibros','/Users/ruben/Documents/pruebita')
+ruta = recorrer_carpeta('/Users/ruben/Documents/pruebita')
+for ruta in recorrer_carpeta:
+       if comprobar_tamaño (ruta):
+           obtener_id32(ruta)
+       else:
+           obtener_id(ruta)
