@@ -120,7 +120,7 @@ def recorrer_carpeta (carpeta):
         ruta = os.path.join(carpeta, nombre_archivo)
         if os.path.isfile(ruta):
             rutas.append(ruta)
-    return rutas, archivos
+    return [rutas, archivos]
 
 #Definimos la función que va a comprobar si un archivo es mayor que 32MB
 def comprobar_tamaño(ruta_archivo):
@@ -211,7 +211,9 @@ def sql(result, archivo):
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
-rutas, archivos = recorrer_carpeta(file_temp)
+resultados = recorrer_carpeta(file_temp)
+rutas = resultados[0]
+archivos = resultados[1]
 posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
