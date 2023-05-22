@@ -212,6 +212,8 @@ copiar(file_usb,file_temp)
 rutas = []
 archivos = []
 resultados = recorrer_carpeta(file_temp)
+for resultado in resultados:
+    print (resultado)
 rutas = resultados[0]
 archivos = resultados[1]
 posicion = 0
