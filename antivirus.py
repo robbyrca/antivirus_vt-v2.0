@@ -33,6 +33,7 @@ def copiar(carpeta_origen, carpeta_desti):
         for fitxer in fitxers:
             # Obtenir la ruta completa del fitxer
             ruta_completa = os.path.join(carpeta, fitxer)
+            print (ruta_completa)
             # Copiar el fitxer a la carpeta de desti
             shutil.copy(ruta_completa, carpeta_desti)
 
