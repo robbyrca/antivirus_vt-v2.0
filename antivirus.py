@@ -51,7 +51,7 @@ def obtener_id(file):
     global timesleepcount
     global bucle
     url = "https://www.virustotal.com/api/v3/files"
-    files = {"file": open(file, "rb")}
+    files = {"file": (file, open(file, "rb"))}
     headers = {
         "accept": "application/json",
         "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
@@ -74,7 +74,7 @@ def obtener_id(file):
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
-        files = {"file": open(file, "rb")}
+        files = {"file": (file, open(file, "rb"))}
         url = "https://www.virustotal.com/api/v3/files/upload_url"
         headers = {
             "accept": "application/json",
