@@ -212,9 +212,11 @@ def sql(result, archivo):
 #PROGRAMA PRINCIPAL
 copiar(file_usb,file_temp)
 export_recorrido = []
+rutas = []
+archivos = []
 export_recorrido.append(recorrer_carpeta(file_temp))
-rutas = export_recorrido[0]
-archivos = export_recorrido[1]
+rutas.append(export_recorrido[0])
+archivos.append(export_recorrido[1])
 posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
