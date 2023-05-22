@@ -120,8 +120,8 @@ def recorrer_carpeta (carpeta):
         if os.path.isfile(ruta):
             rutas.append(ruta)
     export_recorrido = []
-    export_recorrido[0] = rutas
-    export_recorrido[1] = archivos
+    export_recorrido.append(rutas)
+    export_recorrido.append(archivos)
     return export_recorrido
 
 #Definimos la función que va a comprobar si un archivo es mayor que 32MB
@@ -206,7 +206,7 @@ def sql(result, archivo):
 
 #PROGRAMA PRINCIPAL
 copiar(file_usb,file_temp)
-export_recorrido = recorrer_carpeta('/Users/ruben/Documents/revistita')
+export_recorrido = recorrer_carpeta(file_temp)
 rutas = export_recorrido[0]
 archivos = export_recorrido[1]
 posicion = 0
