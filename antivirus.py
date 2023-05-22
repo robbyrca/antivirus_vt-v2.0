@@ -211,7 +211,8 @@ def sql(result, archivo):
 
 #PROGRAMA PRINCIPAL
 copiar(file_usb,file_temp)
-export_recorrido = recorrer_carpeta(file_temp)
+export_recorrido = []
+export_recorrido.append(recorrer_carpeta(file_temp))
 rutas = export_recorrido[0]
 archivos = export_recorrido[1]
 posicion = 0
