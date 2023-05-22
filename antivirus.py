@@ -132,18 +132,23 @@ def comprobar_tamaño(ruta_archivo):
         if tamano_archivo >= tamano_minimo:
             return True
 
-def mover(carpeta_origen, carpeta_desti):
-    # Comprovar si la carpeta de desti existeix, si no, crear-la
-    if not os.path.exists(carpeta_desti):
-        os.makedirs(carpeta_desti)
+def mover(carpeta_origen, carpeta_destino):
+    # Comprobar si la carpeta de destino existe, si no, crearla
+    if not os.path.exists(carpeta_destino):
+        os.makedirs(carpeta_destino)
 
-    # Per a cada carpeta, subcarpeta i fitxer que es trobi a la carpeta origen
-    for carpeta, subcarpetes, fitxers in os.walk(carpeta_origen):
-        for fitxer in fitxers:
-            # Obtenir la ruta completa del fitxer
-            ruta_completa = os.path.join(carpeta, fitxer)
-            # Copiar el fitxer a la carpeta de desti
-            shutil.move(ruta_completa, carpeta_desti)
+    # Para cada archivo que se encuentre en la carpeta origen
+    for archivo in os.listdir(carpeta_origen):
+        ruta_origen = os.path.join(carpeta_origen, archivo)
+        ruta_destino = os.path.join(carpeta_destino, archivo)
+        
+        # Comprobar si el archivo ya existe en la carpeta de destino
+        if os.path.exists(ruta_destino):
+            # Eliminar el archivo de la carpeta de origen
+            os.remove(ruta_origen)
+        else:
+            # Mover el archivo a la carpeta de destino
+            shutil.move(ruta_origen, ruta_destino)
 
 #Definimos la función que va hacer una pausa de 60 segundos
 def pause():
