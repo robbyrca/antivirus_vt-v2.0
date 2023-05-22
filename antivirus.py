@@ -11,7 +11,7 @@ file_quarantine = 'home/archivos/cuarentena'
 file_revised = '/home/archivos/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
 file_result1 = '/var/www/html/antivirus/cuarentena'
-file_usb = '/home/usb'
+file_usb = '/media/usb'
 
 #Definimos las variables para conectar con la base de datos
 mydb = mysql.connector.connect(
