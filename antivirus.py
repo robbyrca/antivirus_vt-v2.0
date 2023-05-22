@@ -224,7 +224,7 @@ for ruta in rutas:
            id = obtener_id32(ruta)
            result = analizar(id)
            sql(result, archivos[posicion])
-           print('Registro añadido: 'ruta)
+           print('Registro añadido: '+ruta)
         else:
            print('obteniendo id: '+ruta)
            id = obtener_id(ruta)
