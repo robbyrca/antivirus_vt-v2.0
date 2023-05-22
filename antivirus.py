@@ -5,10 +5,10 @@ from urllib import response
 from pathlib import Path
 
 #Determinamos las rutas
-file_here = '/'
-file_temp = '/temp'
-file_quarantine = '/cuarentena'
-file_revised = '/revisado'
+file_here = '/home/archivo'
+file_temp = '/home/archivos/temp'
+file_quarantine = 'home/archivos/cuarentena'
+file_revised = '/home/archivos/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
 file_result1 = '/var/www/html/antivirus/cuarentena'
 file_usb = '/home/usb'
