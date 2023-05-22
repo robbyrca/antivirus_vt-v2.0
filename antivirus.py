@@ -72,6 +72,7 @@ def obtener_id(file):
         print ("No s'ha pogut obtenir la URL :(")
         print ("ERROR al pujar el archiu :!")
         print ("Status code: " + str(response.status_code))
+        exit()
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
