@@ -233,8 +233,8 @@ archivos = resultados[1]
 posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
-            logs(1, ruta)
-            id = obtener_id32(ruta)
+            print('obteniendo id: '+ruta)
+            id = obtener_id(ruta)
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
@@ -245,8 +245,8 @@ for ruta in rutas:
                 sql(result,archivos[posicion])
                 logs(2,ruta)
         else:
-            logs(1, ruta)
-            id = obtener_id(ruta)
+            print('obteniendo id: '+ruta)
+            id = obtener_id32(ruta)
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
