@@ -212,13 +212,13 @@ def sql(result, archivo):
 def logs(option, ruta):
     if option == 1:
         with open(file_log, "a") as fp:
-            fp.write(time.time()+" obteniendo id: "+ruta)
+            fp.write(f"{time.time()} obteniendo id: {ruta}")
     if option == 2:
         with open(file_log, "a") as fp:
-            fp.write(time.time()+" Registro añadido: "+ruta)
+            fp.write(f"{time.time()} Registro añadido: {ruta}")
     if option == 3:
         with open(file_log, "a") as fp:
-            fp.write(time.time()+" Virus encontrado: "+ruta)
+            fp.write(f"{time.time()} Virus encontrado: {ruta}")
 
 
 #PROGRAMA PRINCIPAL
