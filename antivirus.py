@@ -12,6 +12,7 @@ file_revised = '/home/archivos/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
 file_result1 = '/var/www/html/antivirus/cuarentena'
 file_usb = '/media/usb'
+file_log ='/var/www/html/antivirus/logs/antivirus.log'
 
 #Definimos las variables para conectar con la base de datos
 mydb = mysql.connector.connect(
@@ -208,6 +209,18 @@ def sql(result, archivo):
         mydb.commit()
 
 
+def logs(option, ruta):
+    if option == 1:
+        with open(file_log, "a") as fp:
+            fp.write(time.time()+" obteniendo id: "+ruta)
+    if option == 2:
+        with open(file_log, "a") as fp:
+            fp.write(time.time()+" Registro añadido: "+ruta)
+    if option == 3:
+        with open(file_log, "a") as fp:
+            fp.write(time.time()+" Virus encontrado: "+ruta)
+
+
 #PROGRAMA PRINCIPAL
 copiar(file_usb,file_temp)
 rutas = []
@@ -220,18 +233,28 @@ archivos = resultados[1]
 posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
-            print('obteniendo id: '+ruta)
+            logs(1, ruta)
             id = obtener_id32(ruta)
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
+                sql(result,archivos[posicion])
+                logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
                 sql(result,archivos[posicion])
+                logs(2,ruta)
         else:
-            print('obteniendo id: '+ruta)
+            logs(1, ruta)
             id = obtener_id(ruta)
             result = analizar(id)
-            sql(result, archivos[posicion])
-            print('Registro añadido: '+ruta)
+            if result == 1:
+                mover(file_temp,file_result1)
+                sql(result,archivos[posicion])
+                logs(3,ruta)
+            else:
+                mover(file_temp, file_result0) 
+                sql(result,archivos[posicion])
+                logs(2,ruta)
+            
         posicion=posicion+1
