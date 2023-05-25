@@ -221,7 +221,7 @@ posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
             print('obteniendo id: '+ruta)
-            id = obtener_id(ruta)
+            id = obtener_id32(ruta)
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
@@ -230,7 +230,7 @@ for ruta in rutas:
                 sql(result,archivos[posicion])
         else:
             print('obteniendo id: '+ruta)
-            id = obtener_id32(ruta)
+            id = obtener_id(ruta)
             result = analizar(id)
             sql(result, archivos[posicion])
             print('Registro añadido: '+ruta)
