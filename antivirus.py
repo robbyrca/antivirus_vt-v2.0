@@ -237,14 +237,22 @@ for ruta in rutas:
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
+                sql(result,archivos[posicion])
                 logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
                 sql(result,archivos[posicion])
                 logs(2,ruta)
         else:
+            logs(1,ruta)
             id = obtener_id32(ruta)
             result = analizar(id)
-            sql(result, archivos[posicion])
-            logs(2,ruta)
+            if result == 1:
+                mover(file_temp,file_result1)
+                sql(result,archivos[posicion])
+                logs(3,ruta)
+            else:
+                mover(file_temp, file_result0) 
+                sql(result,archivos[posicion])
+                logs(2,ruta)
         posicion=posicion+1
