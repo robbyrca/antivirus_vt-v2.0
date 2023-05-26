@@ -102,7 +102,7 @@ def obtener_id32(file):
             print ("Status code: " + str(response.status_code))
         
         #Obtenim una id
-        response = requests.post(url_upload, files=files, headers=headers)
+        response = requests.post(url_upload, files=file, headers=headers)
         if(response.status_code == 429):
             print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
             print("Codigo de error : " + str(response.status_code))
