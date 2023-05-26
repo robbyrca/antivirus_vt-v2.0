@@ -243,7 +243,6 @@ for ruta in rutas:
                 sql(result,archivos[posicion])
                 logs(2,ruta)
         else:
-            print('obteniendo id: '+ruta)
             id = obtener_id32(ruta)
             result = analizar(id)
             sql(result, archivos[posicion])
