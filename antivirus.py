@@ -77,7 +77,7 @@ def obtener_id(file):
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
-        files = {"file": open(file, "rb")}
+        file = {"file": open(file, "rb")}
         url = "https://www.virustotal.com/api/v3/files/upload_url"
         headers = {
             "accept": "application/json",
