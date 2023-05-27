@@ -1,5 +1,5 @@
 #Importamos las librerias necesarias para el proyecto
-import shutil,os,json, time, datetime, requests
+import shutil,os,json, time, datetime, requests, sys
 import mysql.connector
 from urllib import response
 from pathlib import Path
@@ -77,7 +77,7 @@ def obtener_id(file):
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
-        file = {"file": open(file, "rb")}
+        files = {"file": open(file, "rb")}
         url = "https://www.virustotal.com/api/v3/files/upload_url"
         headers = {
             "accept": "application/json",
@@ -102,7 +102,7 @@ def obtener_id32(file):
             print ("Status code: " + str(response.status_code))
         
         #Obtenim una id
-        response = requests.post(url_upload, files=file, headers=headers)
+        response = requests.post(url_upload, files=files, headers=headers)
         if(response.status_code == 429):
             print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
             print("Codigo de error : " + str(response.status_code))
@@ -194,17 +194,17 @@ def analizar(id):
             print ("Status code: " + str(response.status_code))
 
 #Definimos la función para guardar en la base de datos
-def sql(result, archivo):
+def sql(result, archivo, fk):
     if result == 1:
         mycursor = mydb.cursor()
-        sql = "INSERT INTO cuarentena (path, filename) VALUES (%s, %s)"
-        val = (file_result0, archivo)
+        sql = "INSERT INTO cuarentena (path, filename, usbFor) VALUES (%s, %s)"
+        val = (file_result0, archivo, fk)
         mycursor.execute(sql, val)
         mydb.commit()
     else:   
         mycursor = mydb.cursor()
-        sql = "INSERT INTO archivos (path, filename) VALUES (%s, %s)"
-        val = (file_result1,archivo)
+        sql = "INSERT INTO archivos (path, filename, usbFor) VALUES (%s, %s)"
+        val = (file_result1,archivo, fk)
         mycursor.execute(sql, val)
         mydb.commit()
 
@@ -221,6 +221,8 @@ def logs(option, ruta):
 
 
 #PROGRAMA PRINCIPAL
+fkusb = sys.argv[1]
+print ("variable fkusb: ".fkusb)
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
@@ -237,11 +239,11 @@ for ruta in rutas:
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
-                sql(result,archivos[posicion])
+                sql(result,archivos[posicion], fkusb)
                 logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
-                sql(result,archivos[posicion])
+                sql(result,archivos[posicion],fkusb)
                 logs(2,ruta)
         else:
             logs(1,ruta)
@@ -249,10 +251,10 @@ for ruta in rutas:
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
-                sql(result,archivos[posicion])
+                sql(result,archivos[posicion],fkusb)
                 logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
-                sql(result,archivos[posicion])
+                sql(result,archivos[posicion],fkusb)
                 logs(2,ruta)
         posicion=posicion+1
