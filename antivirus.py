@@ -222,7 +222,7 @@ def logs(option, ruta):
 
 #PROGRAMA PRINCIPAL
 fkusb = sys.argv[1]
-print ("variable fkusb: ".fkusb)
+print ("variable fkusb: "+fkusb)
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
