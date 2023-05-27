@@ -194,17 +194,17 @@ def analizar(id):
             print ("Status code: " + str(response.status_code))
 
 #Definimos la función para guardar en la base de datos
-def sql(result, archivo, fk):
+def sql(result, archivo, fkusb):
     if result == 1:
         mycursor = mydb.cursor()
         sql = "INSERT INTO cuarentena (path, filename, usbFor) VALUES (%s, %s)"
-        val = (file_result0, archivo, fk)
+        val = (file_result0, archivo, fkusb)
         mycursor.execute(sql, val)
         mydb.commit()
     else:   
         mycursor = mydb.cursor()
         sql = "INSERT INTO archivos (path, filename, usbFor) VALUES (%s, %s)"
-        val = (file_result1,archivo, fk)
+        val = (file_result1,archivo, fkusb)
         mycursor.execute(sql, val)
         mydb.commit()
 
