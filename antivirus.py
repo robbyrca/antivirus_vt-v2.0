@@ -250,7 +250,7 @@ def consultar_id(id_serial_short):
 #PROGRAMA PRINCIPAL
 id_serial_short = obtener_id_serial_short('/dev/sda')
 fkusb = consultar_id(id_serial_short)
-print ("variable fkusb: {fkusb}")
+print ("variable fkusb: "+str(fkusb))
 foranea = fkusb
 copiar(file_usb,file_temp)
 rutas = []
