@@ -50,8 +50,6 @@ def checkFileExistance(enviocheck):
 
 #Definimos la función que va a enviar y recoger el id del archivo
 def obtener_id(file):
-    global timesleepcount
-    global bucle
     url = "https://www.virustotal.com/api/v3/files"
     files = {"file": open(file, "rb")}
     headers = {
@@ -59,14 +57,13 @@ def obtener_id(file):
         "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
     }
     response = requests.post(url, files=files, headers=headers)
-    status_code = response.status_code
-    if(status_code == 429):
-        print("Error de cuota excedida")
+    if(response.status_code == 429):
+        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
         print("Codigo de error : " + str(response.status_code))
         pause()
-        id = obtener_id(ruta)
+        id=obtener_id(file)
         return id
-    if status_code == 200:
+    if response.status_code == 200:
         jsonresp = response.json()
         id = jsonresp.get("data").get("id")
         return id
@@ -74,7 +71,6 @@ def obtener_id(file):
         print ("No s'ha pogut obtenir la URL :(")
         print ("ERROR al pujar el archiu :!")
         print ("Status code: " + str(response.status_code))
-        exit()
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
@@ -84,41 +80,33 @@ def obtener_id32(file):
         "accept": "application/json",
         "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
     }
-
     response = requests.get(url, headers=headers)
-    status_code = response.status_code
-    if status_code == 429:
+    if(response.status_code == 429):
         print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
         print("Codigo de error : " + str(response.status_code))
-        time.sleep(60) 
+        exit()
+
+    if response.status_code == 200:
+        result = response.json()
+        url_upload = result.get("data")
+
+    else:
+        print ("No s'ha pogut obtenir la URL :(")
+        print ("ERROR al pujar el archiu :!")
+        print ("Status code: " + str(response.status_code))
+        
+    #Obtenim una id
+    response = requests.post(url_upload, files=files, headers=headers)
+    if(response.status_code == 429):
+        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
+        print("Codigo de error : " + str(response.status_code))
         id = obtener_id32(file)
         return id
 
-    if status_code == 200:
+    if response.status_code == 200:
         result = response.json()
-        url_upload = result.get("data")
-        # Obtenemos una ID
-        response = requests.post(url_upload, files=files, headers=headers)
-        status_code2=response.status_code
-        if status_code2 == 429:
-            print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-            print("Codigo de error : " + str(response.status_code))
-            exit()
-
-        if status_code2 == 200:
-            result = response.json()
-            id = result.get("data").get("id")
-            return id
-        else:
-            print("No se ha podido obtener la ID :(")
-            print("Status code: " + str(response.status_code))
-            return None
-
-    else:
-        print("No se ha podido obtener la URL :(")
-        print("ERROR al subir el archivo :!")
-        print("Status code: " + str(response.status_code))
-        return None
+        id = result.get("data").get("id")
+        return id
 
 
 
@@ -170,8 +158,6 @@ def pause():
 
 #Definimos la función para analizar la id
 def analizar(id):
-    global bucle
-    global timesleepcount
     url = "https://www.virustotal.com/api/v3/analyses/"+id
     headers = {
         "accept": "application/json",
