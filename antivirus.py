@@ -7,7 +7,7 @@ from pathlib import Path
 #Determinamos las rutas
 file_here = '/home/antivirus_vt-v2.0/archivo'
 file_temp = '/home/antivirus_vt-v2.0/archivos/temp'
-file_quarantine = 'home/antivirus_vt-v2.0/archivos/cuarentena'
+file_quarantine = '/home/antivirus_vt-v2.0/archivos/cuarentena'
 file_revised = '/home/antivirus_vt-v2.0/archivos/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
 file_result1 = '/var/www/html/antivirus/cuarentena'
