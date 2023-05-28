@@ -250,7 +250,6 @@ for ruta in rutas:
             logs(1,ruta)
             id = obtener_id32(ruta)
             result = analizar(id)
-            mover(file_temp,file_result1)
             sql(result,archivos[posicion],foranea)
             logs(2,ruta)
         posicion=posicion+1
