@@ -223,6 +223,7 @@ def logs(option, ruta):
 #PROGRAMA PRINCIPAL
 fkusb = sys.argv[1]
 print ("variable fkusb: "+fkusb)
+foranea = fkusb
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
@@ -239,11 +240,11 @@ for ruta in rutas:
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
-                sql(result,archivos[posicion], fkusb)
+                sql(result,archivos[posicion], foranea)
                 logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
-                sql(result,archivos[posicion],fkusb)
+                sql(result,archivos[posicion],foranea)
                 logs(2,ruta)
         else:
             logs(1,ruta)
@@ -251,10 +252,10 @@ for ruta in rutas:
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
-                sql(result,archivos[posicion],fkusb)
+                sql(result,archivos[posicion],foranea)
                 logs(3,ruta)
             else:
                 mover(file_temp, file_result0) 
-                sql(result,archivos[posicion],fkusb)
+                sql(result,archivos[posicion],foranea)
                 logs(2,ruta)
         posicion=posicion+1
