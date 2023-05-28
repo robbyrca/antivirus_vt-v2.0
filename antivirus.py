@@ -59,13 +59,14 @@ def obtener_id(file):
         "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
     }
     response = requests.post(url, files=files, headers=headers)
-    if(response.status_code == 429):
+    status_code = response.status_code
+    if(status_code == 429):
         print("Error de cuota excedida")
         print("Codigo de error : " + str(response.status_code))
         pause()
         id = obtener_id(ruta)
         return id
-    if response.status_code == 200:
+    if status_code == 200:
         jsonresp = response.json()
         id = jsonresp.get("data").get("id")
         return id
