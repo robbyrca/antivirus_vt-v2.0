@@ -231,6 +231,7 @@ def consultar_id(id_serial_short):
     mycursor.execute(sql, val)
     id_result = mycursor.fetchone()  # Obtén el resultado de la consulta
     if id_result:
+        print (id_result[0])
         return id_result[0]  # Devuelve el primer elemento del resultado (id)
     else:
         return None  # Si no se encontró ningún resultado, devuelve None
@@ -239,8 +240,7 @@ def consultar_id(id_serial_short):
 
 #PROGRAMA PRINCIPAL
 id_serial_short = obtener_id_serial_short('/dev/sda')
-fkar = consultar_id(id_serial_short)
-fkusb = fkar[0]
+fkusb = consultar_id(id_serial_short)
 print ("variable fkusb: "+fkusb)
 foranea = fkusb
 copiar(file_usb,file_temp)
