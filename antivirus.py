@@ -138,7 +138,12 @@ def analizar(api_key, scan_id):
     params = {'apikey': api_key, 'resource': scan_id}
 
     response = requests.get(url, params=params)
-    jsonresp = response.json()
+
+    try:
+        response_json = response.json()
+    except json.JSONDecodeError as e:
+        print('Error al decodificar la respuesta JSON:', str(e))
+        return None
 
     if response.status_code == 200:
         if 'data' in jsonresp and 'attributes' in jsonresp['data'] and 'stats' in jsonresp['data']['attributes']:
