@@ -85,24 +85,26 @@ def obtener_id32(file):
     }
 
     response = requests.get(url, headers=headers)
-    if response.status_code == 429:
+    status_code = response.status_code
+    if status_code == 429:
         print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
         print("Codigo de error : " + str(response.status_code))
         time.sleep(60) 
         id = obtener_id32(file)
         return id
 
-    if response.status_code == 200:
+    if status_code == 200:
         result = response.json()
         url_upload = result.get("data")
         # Obtenemos una ID
         response = requests.post(url_upload, files=files, headers=headers)
-        if response.status_code == 429:
+        status_code2=response.status_code
+        if status_code2 == 429:
             print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
             print("Codigo de error : " + str(response.status_code))
             exit()
 
-        if response.status_code == 200:
+        if status_code2 == 200:
             result = response.json()
             id = result.get("data").get("id")
             return id
