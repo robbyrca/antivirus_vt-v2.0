@@ -195,14 +195,6 @@ def consultar_id(id_serial_short):
     else:
         return None  # Si no se encontró ningún resultado, devuelve None
 
-def es_malicioso(reporte):
-    reporte = reporte.get("data").get("attributes").get("stats").get("malicious")
-    if reporte:
-        if reporte > 0:
-            malget = True
-        else:
-            malget = False
-    return malget
 
 #PROGRAMA PRINCIPAL
 api_key = "5ac18edb61371a2f32161864af8557f1bf991b6581f1a87a79fb04f21dc6851e"
