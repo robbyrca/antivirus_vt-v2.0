@@ -141,7 +141,7 @@ def analizar(api_key, scan_id):
     response_json = response.json()
 
     if response.status_code == 200:
-        reporte = response_json["data"]["attributes"]["stats"]["malicious"]
+        reporte = response.json()["data"]["attributes"]["stats"]["malicious"]
         if reporte:
             if reporte > 0:
                 malget = True
