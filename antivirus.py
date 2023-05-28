@@ -5,8 +5,8 @@ from urllib import response
 from pathlib import Path
 
 #Determinamos las rutas
-file_here = '/home/antivirus_vt-v2.0/archivo'
-file_temp = '/home/antivirus_vt-v2.0/archivos/temp'
+file_here = '/home/antivirus_vt-v2.0'
+file_temp = '/home/archivos/temp'
 file_quarantine = '/home/antivirus_vt-v2.0/archivos/cuarentena'
 file_revised = '/home/antivirus_vt-v2.0/archivos/revisado'
 file_result0 = '/var/www/html/antivirus/archivos'
@@ -255,7 +255,7 @@ foranea = fkusb
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
-resultados = recorrer_carpeta(file_usb)
+resultados = recorrer_carpeta(file_temp)
 for resultado in resultados:
     print (resultado)
 rutas = resultados[0]
