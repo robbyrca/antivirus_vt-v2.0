@@ -77,41 +77,46 @@ def obtener_id(file):
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(file):
-        files = {"file": open(file, "rb")}
-        url = "https://www.virustotal.com/api/v3/files/upload_url"
-        headers = {
-            "accept": "application/json",
-            "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
-        }
+    files = {"file": open(file, "rb")}
+    url = "https://www.virustotal.com/api/v3/files/upload_url"
+    headers = {
+        "accept": "application/json",
+        "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
+    }
 
-        response = requests.get(url, headers=headers)
-        if(response.status_code == 429):
-            print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-            print("Codigo de error : " + str(response.status_code))
-            pause()
-            id = obtener_id32(file)
-            return id
+    response = requests.get(url, headers=headers)
+    if response.status_code == 429:
+        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
+        print("Codigo de error : " + str(response.status_code))
+        time.sleep(60)  # Pausa el programa durante 5 segundos antes de reintentar
+        return obtener_id32(file)
 
-        if response.status_code == 200:
-            result = response.json()
-            url_upload = result.get("data")
+    if response.status_code == 200:
+        result = response.json()
+        url_upload = result.get("data")
 
-        else:
-            print ("No s'ha pogut obtenir la URL :(")
-            print ("ERROR al pujar el archiu :!")
-            print ("Status code: " + str(response.status_code))
-        
-        #Obtenim una id
-        response = requests.post(url_upload, files=files, headers=headers)
-        if(response.status_code == 429):
-            print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-            print("Codigo de error : " + str(response.status_code))
-            exit()
+    else:
+        print("No se ha podido obtener la URL :(")
+        print("ERROR al subir el archivo :!")
+        print("Status code: " + str(response.status_code))
+        return None
 
-        if response.status_code == 200:
-            result = response.json()
-            id = result.get("data").get("id")
-            return id
+    # Obtenemos una ID
+    response = requests.post(url_upload, files=files, headers=headers)
+    if response.status_code == 429:
+        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
+        print("Codigo de error : " + str(response.status_code))
+        exit()
+
+    if response.status_code == 200:
+        result = response.json()
+        id = result.get("data").get("id")
+        return id
+    else:
+        print("No se ha podido obtener la ID :(")
+        print("Status code: " + str(response.status_code))
+        return None
+
 
 #Definimos la función que va recuperar el array de los archivos de la carpeta
 def recorrer_carpeta (carpeta):
