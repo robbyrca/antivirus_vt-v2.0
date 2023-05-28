@@ -212,7 +212,8 @@ for resultado in resultados:
         if id:
             result = analizar(api_key, id)
             if result:
-                if es_malicioso(result):
+                malget = es_malicioso(result)
+                if malget:
                     mover(file_temp, file_result1)
                     es_malicioso = True
                     rutasql = file_result1
