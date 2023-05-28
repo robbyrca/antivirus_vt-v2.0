@@ -216,11 +216,11 @@ for resultado in resultados:
                     mover(file_temp, file_result1)
                     es_malicioso = True
                     rutasql = file_result1
+                    logs(3,ruta)
                 else:
                     mover(file_temp, file_result0)
                     es_malicioso = False
                     rutasql = file_result0
-                
+                    logs(2,ruta)
                 sql(rutasql,es_malicioso,archivos[posicion],foranea)
-                logs(2,ruta)
         posicion=posicion+1
