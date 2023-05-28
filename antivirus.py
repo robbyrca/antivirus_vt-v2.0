@@ -198,13 +198,13 @@ def sql(result, archivo, fkusb):
     if result == 1:
         mycursor = mydb.cursor()
         sql = "INSERT INTO cuarentena (path, filename, usbFor) VALUES (%s, %s, %s)"
-        val = (file_result0, archivo, fkusb)
+        val = (file_result1, archivo, fkusb)
         mycursor.execute(sql, val)
         mydb.commit()
     else:   
         mycursor = mydb.cursor()
         sql = "INSERT INTO archivos (path, filename, usbFor) VALUES (%s, %s, %s)"
-        val = (file_result1,archivo, fkusb)
+        val = (file_result0,archivo, fkusb)
         mycursor.execute(sql, val)
         mydb.commit()
 
