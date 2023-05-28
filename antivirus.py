@@ -141,7 +141,14 @@ def analizar(api_key, scan_id):
     response_json = response.json()
 
     if response.status_code == 200:
-        return response_json
+        reporte = response_json.get("data").get("attributes").get("stats").get("malicious")
+        if reporte:
+            if reporte > 0:
+                malget = True
+            else:
+                malget = False
+            return malget
+
     else:
         print('Error al obtener el reporte:', response_json.get('verbose_msg'))
         return None
@@ -217,16 +224,14 @@ for resultado in resultados:
         if id:
             result = analizar(api_key, id)
             if result:
-                malget = es_malicioso(result)
-                if malget:
-                    mover(file_temp, file_result1)
-                    es_malicioso = True
-                    rutasql = file_result1
-                    logs(3,ruta)
-                else:
-                    mover(file_temp, file_result0)
-                    es_malicioso = False
-                    rutasql = file_result0
-                    logs(2,ruta)
-                sql(rutasql,es_malicioso,archivos[posicion],foranea)
+                mover(file_temp, file_result1)
+                es_malicioso = True
+                rutasql = file_result1
+                logs(3,ruta)
+            else:
+                mover(file_temp, file_result0)
+                es_malicioso = False
+                rutasql = file_result0
+                logs(2,ruta)
+            sql(rutasql,es_malicioso,archivos[posicion],foranea)
         posicion=posicion+1
