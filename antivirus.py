@@ -187,7 +187,7 @@ def es_malicioso(reporte):
     return positives > 0
 
 #PROGRAMA PRINCIPAL
-api_key = "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
+api_key = "5ac18edb61371a2f32161864af8557f1bf991b6581f1a87a79fb04f21dc6851e"
 id_serial_short = obtener_id_serial_short('/dev/sda')
 fkusb = consultar_id(id_serial_short)
 print ("variable fkusb: "+str(fkusb))
