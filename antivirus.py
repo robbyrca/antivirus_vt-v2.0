@@ -88,7 +88,7 @@ def obtener_id32(file):
     if response.status_code == 429:
         print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
         print("Codigo de error : " + str(response.status_code))
-        time.sleep(60)  # Pausa el programa durante 5 segundos antes de reintentar
+        time.sleep(60)
         return obtener_id32(file)
 
     if response.status_code == 200:
@@ -260,7 +260,7 @@ posicion = 0
 for ruta in rutas:
         if comprobar_tamaño (ruta):
             logs(1,ruta)
-            id = obtener_id32(ruta)
+            id = obtener_id(ruta)
             result = analizar(id)
             if result == 1:
                 mover(file_temp,file_result1)
@@ -272,7 +272,7 @@ for ruta in rutas:
                 logs(2,ruta)
         else:
             logs(1,ruta)
-            id = obtener_id(ruta)
+            id = obtener_id32(ruta)
             result = analizar(id)
             sql(result,archivos[posicion],foranea)
             logs(2,ruta)
