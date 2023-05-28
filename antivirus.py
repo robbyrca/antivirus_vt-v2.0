@@ -141,13 +141,14 @@ def analizar(api_key, scan_id):
     jsonresp = response.json()
 
     if response.status_code == 200:
-        reporte = jsonresp.get("data").get("attributes").get("stats").get("malicious")
-        if reporte:
-            if reporte > 0:
-                malget = True
-            else:
-                malget = False
-            return malget
+        if 'data' in jsonresp and 'attributes' in jsonresp['data'] and 'stats' in jsonresp['data']['attributes']:
+            reporte = jsonresp.get("data").get("attributes").get("stats").get("malicious")
+            if reporte:
+                if reporte > 0:
+                    malget = True
+                else:
+                    malget = False
+                return malget
 
     else:
         print('Error al obtener el reporte:', response_json.get('verbose_msg'))
