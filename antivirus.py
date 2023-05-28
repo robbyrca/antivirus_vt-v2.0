@@ -195,7 +195,7 @@ foranea = fkusb
 copiar(file_usb,file_temp)
 rutas = []
 archivos = []
-resultados = recorrer_carpeta(file_temp)
+resultados = recorrer_carpeta(file_usb)
 rutasql = ""
 for resultado in resultados:
     print (resultado)
