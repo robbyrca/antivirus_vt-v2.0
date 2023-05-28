@@ -1,5 +1,5 @@
 #Importamos las librerias necesarias para el proyecto
-import shutil,os,json, time, datetime, requests, sys
+import shutil,os,json, time, datetime, requests, pyudev
 import mysql.connector
 from urllib import response
 from pathlib import Path
@@ -219,9 +219,22 @@ def logs(option, ruta):
         with open(file_log, "a") as fp:
             fp.write(f"{datetime.date.today()} Virus encontrado: {ruta}")
 
+def obtener_id_serial_short(dispositivo):
+    context = pyudev.Context()
+    device = pyudev.Devices.from_device_file(context, dispositivo)
+    return device.get('ID_SERIAL_SHORT')
+
+def consultar_id(id_serial_short):
+        mycursor = mydb.cursor()
+        sql = "SELECT id FROM dispositivos WHERE serial like (%s)"
+        val = (id_serial_short)
+        id=mycursor.execute(sql, val)
+        return id
+
 
 #PROGRAMA PRINCIPAL
-fkusb = sys.argv[1]
+id_serial_short = obtener_id_serial_short('/dev/sda')
+fkusb = consultar_id(id_serial_short)
 print ("variable fkusb: "+fkusb)
 foranea = fkusb
 copiar(file_usb,file_temp)
