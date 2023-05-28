@@ -138,10 +138,10 @@ def analizar(api_key, scan_id):
     params = {'apikey': api_key, 'resource': scan_id}
 
     response = requests.get(url, params=params)
-    response_json = response.json()
+    jsonresp = response.json()
 
     if response.status_code == 200:
-        reporte = response_json['malicious']
+        reporte = jsonresp.get("data").get("attributes").get("stats").get("malicious")
         if reporte:
             if reporte > 0:
                 malget = True
