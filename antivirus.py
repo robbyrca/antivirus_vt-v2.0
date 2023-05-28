@@ -225,11 +225,16 @@ def obtener_id_serial_short(dispositivo):
     return device.get('ID_SERIAL_SHORT')
 
 def consultar_id(id_serial_short):
-        mycursor = mydb.cursor()
-        sql = "SELECT id FROM dispositivos WHERE serial like (%s)"
-        val = (id_serial_short)
-        id=mycursor.execute(sql, val)
-        return id
+    mycursor = mydb.cursor()
+    sql = "SELECT id FROM dispositivos WHERE serial LIKE (%s)"
+    val = (id_serial_short,)  # Agrega una coma para crear una tupla de un solo elemento
+    mycursor.execute(sql, val)
+    id_result = mycursor.fetchone()  # Obtén el resultado de la consulta
+    if id_result:
+        return id_result[0]  # Devuelve el primer elemento del resultado (id)
+    else:
+        return None  # Si no se encontró ningún resultado, devuelve None
+
 
 
 #PROGRAMA PRINCIPAL
