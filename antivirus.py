@@ -49,67 +49,43 @@ def checkFileExistance(enviocheck):
         return False
 
 #Definimos la función que va a enviar y recoger el id del archivo
-def obtener_id(file):
-    url = "https://www.virustotal.com/api/v3/files"
-    files = {"file": open(file, "rb")}
-    headers = {
-        "accept": "application/json",
-        "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
-    }
-    response = requests.post(url, files=files, headers=headers)
-    if(response.status_code == 429):
-        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-        print("Codigo de error : " + str(response.status_code))
-        pause()
-        id=obtener_id(file)
-        return id
+def obtener_id(api_key, file):
+    url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+    params = {'apikey': api_key}
+    files = {'file': (file, open(file, 'rb'))}
+
+    response = requests.post(url, files=files, params=params)
+    response_json = response.json()
+
     if response.status_code == 200:
-        jsonresp = response.json()
-        id = jsonresp.get("data").get("id")
-        return id
+        return response_json.get('scan_id')
     else:
-        print ("No s'ha pogut obtenir la URL :(")
-        print ("ERROR al pujar el archiu :!")
-        print ("Status code: " + str(response.status_code))
+        print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
+        return None
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
-def obtener_id32(file):
-    files = {"file": open(file, "rb")}
-    url = "https://www.virustotal.com/api/v3/files/upload_url"
-    headers = {
-        "accept": "application/json",
-        "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
-    }
-    response = requests.get(url, headers=headers)
-    if(response.status_code == 429):
-        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-        print("Codigo de error : " + str(response.status_code))
-        exit()
+def obtener_id32(api_key, file):
+    url = 'https://www.virustotal.com/vtapi/v2/file/scan/upload_url'
+    params = {'apikey': api_key}
+
+    response = requests.get(url, params=params)
+    response_json = response.json()
 
     if response.status_code == 200:
-        result = response.json()
-        url_upload = result.get("data")
+        upload_url = response_json.get('upload_url')
+        files = {'file': (file, open(file, 'rb'))}
 
+        response = requests.post(upload_url, files=files)
+        response_json = response.json()
+
+        if response.status_code == 200:
+            return response_json.get('scan_id')
+        else:
+            print('Error al subir el archivo grande:', response_json.get('verbose_msg'))
     else:
-        print ("No s'ha pogut obtenir la URL :(")
-        print ("ERROR al pujar el archiu :!")
-        print ("Status code: " + str(response.status_code))
-        
-    #Obtenim una id
-    response = requests.post(url_upload, files=files, headers=headers)
-    if(response.status_code == 429):
-        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-        print("Codigo de error : " + str(response.status_code))
-        id = obtener_id32(file)
-        return id
+        print('Error al obtener la URL de carga para el archivo grande:', response_json.get('verbose_msg'))
 
-    if response.status_code == 200:
-        result = response.json()
-        id = result.get("data").get("id")
-        return id
-
-
-
+    return None
 
 #Definimos la función que va recuperar el array de los archivos de la carpeta
 def recorrer_carpeta (carpeta):
@@ -157,52 +133,26 @@ def pause():
         time.sleep(1)
 
 #Definimos la función para analizar la id
-def analizar(id):
-    url = "https://www.virustotal.com/api/v3/analyses/"+id
-    headers = {
-        "accept": "application/json",
-        "x-apikey": "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
-    }
-    response = requests.get(url, headers=headers)
-    if(response.status_code == 429):
-        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-        print("Codigo de error : " + str(response.status_code))
-        result = analizar(id)
-        return result
+def analizar(api_key, scan_id):
+    url = 'https://www.virustotal.com/vtapi/v2/file/report'
+    params = {'apikey': api_key, 'resource': scan_id}
+
+    response = requests.get(url, params=params)
+    response_json = response.json()
+
     if response.status_code == 200:
-        #print(response.text)
-        jsonresp = response.json()
-        if jsonresp.get("data").get("attributes").get("status") != "queued":  
-            malget = jsonresp.get("data").get("attributes").get("stats").get("malicious")
-            #print (malget)
-            if  malget>0:
-                print('Archivo malicioso detectado!')
-                #Determinem result = 1 (virus)
-                result = 1
-                return result
-            else:
-                #Determinem result = 0 (freevir)
-                result = 0
-                return result
-        else:
-            print ("No s'ha pogut obtenir la URL :(")
-            print ("ERROR al pujar el archiu :!")
-            print ("Status code: " + str(response.status_code))
+        return response_json
+    else:
+        print('Error al obtener el reporte:', response_json.get('verbose_msg'))
+        return None
 
 #Definimos la función para guardar en la base de datos
-def sql(result, archivo, fkusb):
-    if result == 1:
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO cuarentena (path, filename, usbFor) VALUES (%s, %s, %s)"
-        val = (file_result1, archivo, fkusb)
-        mycursor.execute(sql, val)
-        mydb.commit()
-    else:   
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO archivos (path, filename, usbFor) VALUES (%s, %s, %s)"
-        val = (file_result0,archivo, fkusb)
-        mycursor.execute(sql, val)
-        mydb.commit()
+def sql(rutasql, es_malicioso, archivo, fkusb):
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO archivos (path, filename, usbFor, malicioso) VALUES (%s, %s, %s, %s)"
+    val = (rutasql,archivo, fkusb, es_malicioso)
+    mycursor.execute(sql, val)
+    mydb.commit()
 
 def logs(option, ruta):
     if option == 1:
@@ -232,9 +182,12 @@ def consultar_id(id_serial_short):
     else:
         return None  # Si no se encontró ningún resultado, devuelve None
 
-
+def es_malicioso(reporte):
+    positives = reporte.get('positives', 0)
+    return positives > 0
 
 #PROGRAMA PRINCIPAL
+api_key = "206706e5d63a9393a5786e3191ba9c471dcbb00305f4a32d49de38c45f20c4c7"
 id_serial_short = obtener_id_serial_short('/dev/sda')
 fkusb = consultar_id(id_serial_short)
 print ("variable fkusb: "+str(fkusb))
@@ -243,22 +196,31 @@ copiar(file_usb,file_temp)
 rutas = []
 archivos = []
 resultados = recorrer_carpeta(file_temp)
+rutasql = ""
 for resultado in resultados:
     print (resultado)
-rutas = resultados[0]
-archivos = resultados[1]
-posicion = 0
-for ruta in rutas:
+    rutas = resultados[0]
+    archivos = resultados[1]
+    posicion = 0
+    for ruta in rutas:
         if comprobar_tamaño (ruta):
             logs(1,ruta)
-            id = obtener_id32(ruta)
-            result = analizar(id)
-            sql(result,archivos[posicion],foranea)
-            logs(2,ruta)
+            id = obtener_id32(api_key, ruta)
         else:
             logs(1,ruta)
-            id = obtener_id(ruta)
-            result = analizar(id)
-            sql(result,archivos[posicion],foranea)
-            logs(2,ruta)
+            id = obtener_id(api_key, ruta)
+        if id:
+            result = analizar(api_key, id)
+            if result:
+                if es_malicioso(result):
+                    mover(file_temp, file_result1)
+                    es_malicioso = True
+                    rutasql = file_result1
+                else:
+                    mover(file_temp, file_result0)
+                    es_malicioso = False
+                    rutasql = file_result0
+                
+                sql(rutasql,es_malicioso,archivos[posicion],foranea)
+                logs(2,ruta)
         posicion=posicion+1
