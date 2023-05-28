@@ -52,7 +52,7 @@ def checkFileExistance(enviocheck):
 def obtener_id(api_key, file):
     url = 'https://www.virustotal.com/vtapi/v2/file/scan'
     params = {'apikey': api_key}
-    files = {'file': (file, open(file, 'wb'))}
+    files = {'file': (file, open(file, 'rb'))}
 
     response = requests.post(url, files=files, params=params)
     response_json = response.json()
@@ -73,7 +73,7 @@ def obtener_id32(api_key, file):
 
     if response.status_code == 200:
         upload_url = response_json.get('upload_url')
-        files = {'file': (file, open(file, 'wb'))}
+        files = {'file': (file, open(file, 'rb'))}
 
         response = requests.post(upload_url, files=files)
         response_json = response.json()
