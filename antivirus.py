@@ -88,12 +88,28 @@ def obtener_id32(file):
     if response.status_code == 429:
         print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
         print("Codigo de error : " + str(response.status_code))
-        time.sleep(60)
-        return obtener_id32(file)
+        time.sleep(60) 
+        id = obtener_id32(file)
+        return id
 
     if response.status_code == 200:
         result = response.json()
         url_upload = result.get("data")
+        # Obtenemos una ID
+        response = requests.post(url_upload, files=files, headers=headers)
+        if response.status_code == 429:
+            print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
+            print("Codigo de error : " + str(response.status_code))
+            exit()
+
+        if response.status_code == 200:
+            result = response.json()
+            id = result.get("data").get("id")
+            return id
+        else:
+            print("No se ha podido obtener la ID :(")
+            print("Status code: " + str(response.status_code))
+            return None
 
     else:
         print("No se ha podido obtener la URL :(")
@@ -101,21 +117,7 @@ def obtener_id32(file):
         print("Status code: " + str(response.status_code))
         return None
 
-    # Obtenemos una ID
-    response = requests.post(url_upload, files=files, headers=headers)
-    if response.status_code == 429:
-        print("Error de cuota excedida :! o Error de demasiadas solicitudes controlate ;)")
-        print("Codigo de error : " + str(response.status_code))
-        exit()
 
-    if response.status_code == 200:
-        result = response.json()
-        id = result.get("data").get("id")
-        return id
-    else:
-        print("No se ha podido obtener la ID :(")
-        print("Status code: " + str(response.status_code))
-        return None
 
 
 #Definimos la función que va recuperar el array de los archivos de la carpeta
