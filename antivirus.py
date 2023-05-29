@@ -59,7 +59,7 @@ def obtener_id(api_key, file):
 
     try:
         response = requests.post(url, files=files, headers=headers)
-        response_json = response.json()
+        response_json = response.text()
 
         if response.status_code == 200:
             return response_json.get('id')
@@ -81,7 +81,7 @@ def obtener_id32(api_key, file):
     }
 
     response = requests.get(url, headers=heaaders)
-    response_json = response.json()
+    response_json = response.text()
 
     if response.status_code == 200:
         upload_url = response_json.get('upload_url')
@@ -155,7 +155,7 @@ def analizar(api_key, scan_id):
     response = requests.get(url, headers=headers)
 
     try:
-        response_json = response.json()
+        response_json = response.text()
     except json.JSONDecodeError as e:
         print('Error al decodificar la respuesta JSON:', str(e))
         return None
