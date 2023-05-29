@@ -50,23 +50,29 @@ def checkFileExistance(enviocheck):
 
 #Definimos la función que va a enviar y recoger el id del archivo
 def obtener_id(api_key, file):
-    url = 'https://www.virustotal.com/vtapi/v2/file/scan'
-    params = {'apikey': api_key}
+    url = 'https://www.virustotal.com/vtapi/v3/files'
+    headers = {
+      "accept": "application/json",
+      "x-apikey": api_key
+    }
     files = {'file': (file, open(file, 'rb'))}
 
-    response = requests.post(url, files=files, params=params)
+    response = requests.post(url, files=files, headers=headers)
     response_json = response.json()
 
     if response.status_code == 200:
-        return response_json.get('scan_id')
+        return response_json.get('id')
     else:
         print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
         return None
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(api_key, file):
-    url = 'https://www.virustotal.com/vtapi/v2/file/scan/upload_url'
-    params = {'apikey': api_key}
+    url = 'https://www.virustotal.com/vtapi/v3/files/upload_url'
+    headers = {
+      "accept": "application/json",
+      "x-apikey": api_key
+    }
 
     response = requests.get(url, params=params)
     response_json = response.json()
@@ -79,7 +85,7 @@ def obtener_id32(api_key, file):
         response_json = response.json()
 
         if response.status_code == 200:
-            return response_json.get('scan_id')
+            return response_json.get('id')
         else:
             print('Error al subir el archivo grande:', response_json.get('verbose_msg'))
     else:
@@ -134,10 +140,13 @@ def pause():
 
 #Definimos la función para analizar la id
 def analizar(api_key, scan_id):
-    url = 'https://www.virustotal.com/vtapi/v2/file/report'
-    params = {'apikey': api_key, 'resource': scan_id}
+    url = 'https://www.virustotal.com/vtapi/v3/files/'+scan_id
+    headers = {
+      "accept": "application/json",
+      "x-apikey": api_key
+    }
 
-    response = requests.get(url, params=params)
+    response = requests.get(url, headers=headers)
 
     try:
         response_json = response.json()
