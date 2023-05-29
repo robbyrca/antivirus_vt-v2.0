@@ -57,19 +57,20 @@ def obtener_id(api_key, file):
     }
     files = {'file': (file, open(file, 'rb'))}
 
-    try:
+    #try:
         response = requests.post(url, files=files, headers=headers)
-        response_json = response.text()
+        response_json = response.text().get('id')
+        return response_json
 
-        if response.status_code == 200:
-            return response_json.get('id')
-        else:
-            print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
-            return None
+        #if response.status_code == 200:
+            #return response_json.get('id')
+        #else:
+            #print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
+            #return None
 
-    except requests.exceptions.JSONDecodeError as e:
-        print('Error al decodificar la respuesta JSON:', str(e))
-        return None
+    #except requests.exceptions.JSONDecodeError as e:
+        #print('Error al decodificar la respuesta JSON:', str(e))
+        #return None
 
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
