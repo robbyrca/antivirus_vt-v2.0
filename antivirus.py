@@ -52,19 +52,25 @@ def checkFileExistance(enviocheck):
 def obtener_id(api_key, file):
     url = 'https://www.virustotal.com/vtapi/v3/files'
     headers = {
-      "accept": "application/json",
-      "x-apikey": api_key
+        "accept": "application/json",
+        "x-apikey": api_key
     }
     files = {'file': (file, open(file, 'rb'))}
 
-    response = requests.post(url, files=files, headers=headers)
-    response_json = response.json()
+    try:
+        response = requests.post(url, files=files, headers=headers)
+        response_json = response.json()
 
-    if response.status_code == 200:
-        return response_json.get('id')
-    else:
-        print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
+        if response.status_code == 200:
+            return response_json.get('id')
+        else:
+            print('Error al subir el archivo pequeño:', response_json.get('verbose_msg'))
+            return None
+
+    except requests.exceptions.JSONDecodeError as e:
+        print('Error al decodificar la respuesta JSON:', str(e))
         return None
+
 
 #Definimos la función que va a enviar y recoger el id del archivo >32
 def obtener_id32(api_key, file):
