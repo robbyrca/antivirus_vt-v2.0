@@ -80,7 +80,7 @@ def obtener_id32(api_key, file):
       "x-apikey": api_key
     }
 
-    response = requests.get(url, params=params)
+    response = requests.get(url, headers=heaaders)
     response_json = response.json()
 
     if response.status_code == 200:
